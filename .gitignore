@@ -1,0 +1,16 @@
+# Windows
+Thumbs.db
+Desktop.ini
+.BIN/
+
+# Python / Virtual Environment
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Cryptographic Keys & Logs
+certs/
+*.pem
+*.key
+*.log
