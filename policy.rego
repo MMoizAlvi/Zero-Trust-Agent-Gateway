@@ -5,20 +5,17 @@ import rego.v1
 default allow = false
 default reason = "Default deny policy enforced"
 
-# Mapping Bearer Tokens to Agent Identities & Roles
-known_agents := {
-    "token-analytics-123": {"agent_id": "agent-01", "role": "analytics_agent"},
-    "token-execution-456": {"agent_id": "agent-02", "role": "execution_agent"}
+# Decode JWT token passed from Gateway input
+parsed_jwt := io.jwt.decode(input.token)
+claims := parsed_jwt[1]
+
+# Extract Agent Identity Claims
+active_agent = {
+    "agent_id": object.get(claims, "sub", "UNKNOWN"),
+    "role": object.get(claims, "role", "UNKNOWN")
 }
 
-# Helper rule to resolve active agent context
-active_agent = known_agents[input.token]
-
-# Helper to expose agent metadata back to Gateway
-agent_info = {
-    "agent_id": object.get(active_agent, "agent_id", "UNKNOWN"),
-    "role": object.get(active_agent, "role", "UNKNOWN")
-}
+agent_info = active_agent
 
 # Rule 1: Analytics Agent -> Read-only access
 allow if {
@@ -37,7 +34,7 @@ allow if {
     input.method == "GET"
 }
 
-# Rule 3: Execution Agent -> POST transaction within spending limit (<= $1000)
+# Rule 3: Execution Agent -> POST transaction within limit (<= $1000)
 allow if {
     active_agent.role == "execution_agent"
     input.method == "POST"
@@ -52,7 +49,7 @@ reason = "Execution payload authorized" if {
     input.payload.amount <= 1000
 }
 
-# Specific Denial Reasons for Audit Logging
+# Explicit Denial Reasons
 reason = sprintf("Transaction amount ($%d) exceeds threshold limit of $1000", [input.payload.amount]) if {
     active_agent.role == "execution_agent"
     input.method == "POST"
