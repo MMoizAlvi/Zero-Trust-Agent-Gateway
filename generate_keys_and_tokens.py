@@ -4,7 +4,6 @@ from datetime import datetime, timedelta, timezone
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives import serialization
 
-# 1. Resolve Project Root Directory dynamically
 # Points to zero-trust-agent-gateway/ whether run from root or test_agent/
 BASE_DIR = Path(__file__).resolve().parent.parent if Path(__file__).resolve().parent.name == "test_agent" else Path(__file__).resolve().parent
 

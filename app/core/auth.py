@@ -19,7 +19,6 @@ class AuthEngine:
 
         token = auth_header.split(" ")[1]
         try:
-            # Cryptographic verification using RS256 Asymmetric Key
             payload = jwt.decode(
                 token,
                 self.public_key,

@@ -2,7 +2,6 @@ import json
 import logging
 from datetime import datetime
 
-# Configure standard logger to output structured JSON
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger("audit_logger")
 
@@ -20,4 +19,3 @@ def log_audit_event(agent_id: str, role: str, action: str, decision: str, reason
         "payload": payload
     }
     logger.info(json.dumps(event))
-    
