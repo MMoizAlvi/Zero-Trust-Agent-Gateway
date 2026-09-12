@@ -4,6 +4,12 @@
 
 ---
 
+## System Architecture
+
+![Zero Trust Architecture](assets/design.png)
+
+---
+
 ## 1. Abstract & Problem Statement
 
 As Autonomous AI Agents and Large Language Model (LLM) tool-use frameworks (e.g., LangChain, AutoGen, CrewAI) gain operational authority over enterprise infrastructure, traditional perimeter defense mechanisms fail. Standard API security paradigms assume static human user sessions or long-lived API keys. When applied to dynamic, probabilistic AI agents, these paradigms introduce severe security vectors:
@@ -36,6 +42,16 @@ The system enforces a **Policy Decision Point (PDP) / Policy Enforcement Point (
 | **Identity Impersonation** | Rogue agent process attempts to invoke administrative endpoints. | **Asymmetric Token Verification:** Mandatory RS256 public-key attestation of `sub` and `role` claims. |
 | **Privilege Escalation** | Low-privilege (Analytics) agent attempts modification operations (POST/DELETE). | **Endpoint RBAC Boundary:** Strict verb/path matching matrices enforced prior to proxy routing. |
 | **Replay & Stale Token Attacks** | Captured agent bearer tokens reused for unauthorized calls. | **Cryptographic Expiry Check:** Short-lived JWT claims strictly enforced via clock skew checks. |
+
+---
+
+## Verification Test Run
+
+![Automated Test Execution Results](assets/execution.png)
+
+---
+
+![Open Policy Agent (Local)](assets/opa.png)
 
 ---
 
