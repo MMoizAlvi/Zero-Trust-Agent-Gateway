@@ -36,6 +36,10 @@ audit_logs/
 *.tar.gz
 .opa/
 
+# Binary Executables & Large Tools
+opa.exe
+*.exe
+
 # Testing & Environment Configurations
 .env
 .env.local
