@@ -1,26 +1,23 @@
-import logging
 import json
-from datetime import datetime, timezone
+import logging
+from datetime import datetime
 
+# Configure standard logger to output structured JSON
 logging.basicConfig(level=logging.INFO, format="%(message)s")
-logger = logging.getLogger("zero_trust_audit")
+logger = logging.getLogger("audit_logger")
 
-def log_audit_event(agent_id: str, role: str, method: str, path: str, decision: str, reason: str, payload: dict = None):
-    audit_record = {
-        "timestamp": datetime.now(timezone.utc).isoformat(),
-        "identity": {
-            "agent_id": agent_id or "ANONYMOUS",
-            "role": role or "UNASSIGNED",
-            "type": "Non-Human Identity (NHI)"
-        },
-        "request": {
-            "method": method,
-            "path": path,
-            "payload_summary": payload or {}
-        },
-        "verdict": {
-            "decision": decision,
-            "reason": reason
-        }
+def log_audit_event(agent_id: str, role: str, action: str, decision: str, reason: str, payload: dict):
+    """
+    Outputs structured JSON log records for compliance and audit analysis.
+    """
+    event = {
+        "timestamp": datetime.utcnow().isoformat() + "Z",
+        "agent_id": agent_id or "UNKNOWN",
+        "role": role or "UNKNOWN",
+        "action": action,
+        "decision": decision,
+        "reason": reason,
+        "payload": payload
     }
-    logger.info(json.dumps(audit_record))
+    logger.info(json.dumps(event))
+    
