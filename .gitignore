@@ -1,16 +1,41 @@
-# Windows
+# Windows & OS Metadata
 Thumbs.db
 Desktop.ini
 .BIN/
+.DS_Store
 
-# Python / Virtual Environment
+# Python & Virtual Environments
 venv/
 .venv/
+env/
 __pycache__/
 *.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
 
-# Cryptographic Keys & Logs
+# IDE & Editor Settings
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Cryptographic Keys & Sensitive Identity Assets
 certs/
 *.pem
 *.key
+*.crt
+*.pub
+
+# Security Telemetry & Audit Logs
 *.log
+logs/
+audit_logs/
+
+# OPA / Policy Engine Temporary Artifacts
+*.tar.gz
+.opa/
+
+# Testing & Environment Configurations
+.env
+.env.local
