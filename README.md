@@ -38,3 +38,42 @@ The system enforces a **Policy Decision Point (PDP) / Policy Enforcement Point (
 | **Replay & Stale Token Attacks** | Captured agent bearer tokens reused for unauthorized calls. | **Cryptographic Expiry Check:** Short-lived JWT claims strictly enforced via clock skew checks. |
 
 ---
+
+## Installation & Setup
+
+### Prerequisites
+
+* **Python:** Version 3.10 or higher
+* **Open Policy Agent (OPA):** CLI binary installed and accessible in system `PATH` or placed in the project root directory as `opa.exe`
+
+---
+
+## Start & Execution
+
+### 1. Environment Setup & Key Generation
+
+```powershell
+# Navigate to project root
+cd zero-trust-agent-gateway
+
+# Create and activate virtual environment
+python -m venv venv
+.\venv\Scripts\Activate.ps1
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Generate RSA-2048 keypair (private_key.pem & public_key.pem)
+python test_agent/generate_tokens.py
+
+# Terminal 1: Upstream Mock Target API (Port 8080)
+python mock_upstream/server.py
+
+# Terminal 2: Open Policy Agent Engine (Port 8181)
+.\opa.exe run --server --addr :8181 policy.rego
+
+# Terminal 3: Zero Trust FastAPI Gateway PEP (Port 8000)
+python -m uvicorn app.main:app --port 8000 --reload
+
+# Terminal 4: Execute 5-Scenario Automated Validation Harness
+python test_agent/agent_simulation.py
